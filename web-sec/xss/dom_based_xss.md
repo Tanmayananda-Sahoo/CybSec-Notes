@@ -50,3 +50,5 @@ document.getElementById("result").innerHTML = query;
 ## Things I learnt from solving labs.
 - While finding XSS vuln, if web uses jquery, then if you want to execute javascript in any attributes like href, src and all, then use <code>javascript:alert('1')</code>.
 - <code>window.location.search</code> is like to find query parameters. (honestly i didn't knew this till now.)
+- ALert wala incident
+- break out of the js string.
