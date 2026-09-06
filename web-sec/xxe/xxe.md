@@ -23,3 +23,5 @@ Example: <code>\<name>Tanmay\</name></code>.
 - Say if the value is to be loaded from a file, then
 <code>\<!DOCTYPE foo [ \<!ENTITY ext SYSTEM "file:///path/to/file" > ]></code>
 
+## Exploiting the XXE Vulnerability
+- By either using external entity for fetching the information from an external site or from an external file.
