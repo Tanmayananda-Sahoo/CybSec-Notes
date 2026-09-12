@@ -15,4 +15,5 @@ Anyone who has the token can easily read the data by decoding.
 ## Exploiting JWT Vulnerabilities
 - Sometimes there are separate functions for decoding and verifying the signature and developers sometimes get confused between those two function and forget to use the verify function and just use decode function.
 - The main point is that sometimes server fails to verify the token, in that case attacker can modify the payload easily and gain access to anyone's account or any unwanted resources.
-- 
+- Another way is that changing the algorithm to none so that no verification occurs for the signature, like when the algorithm is changed to none, then you don't need to provide the signature but the trailing dot after the payload should be present. 
+- One more way is if the signing key is weak enough to brute force or guess, then hashcat can be used which comes pre installed in kali linux. hashcat needs one valid signed jwt from the server itself and a wordlist to bruteforce. As this process does not require sending any request to the server, it is quick enough even for the huge long wordlist.
