@@ -5,6 +5,8 @@
 - Whenever a client requests for a static resource, then the request is first forwarded to the cache and it is checked whether the static resource is available with the cache, if yes (cache hit) then it is served to the user from the cache itself or else (cache miss) the request goes to the server from which the resource is served and also that resource is saved in the cache.
 - Now whether the cache should consider two request same or not, for that purpose cache creates a cache key which consists of both URL Path and parameters. Depending on cache configuration, it can also consist of HTTP Headers. If two cache keys are same, then both the request should be considered identical. If the cache finds a match of the cache key of the request made, then it directly serves the cached response rather than giving the request to the origin server.
 
+The flow of the request is:
+Browser => Cache => Server
 ## Cache rules
 - Cache rules determine what can be cached and for how long like these rules are set for the static resource not for dynamic resource because the dynamic resource may contain something sensitive information as well and also they can be changed so they have to be served fresh from the server itself. 
 - Some common cache rules are to be known:
@@ -21,7 +23,7 @@
 - They don't provide a path to the resource to be served.
 - <code>/path/resource</code> represent the endpoint representing a resource and <code>/param1/param2</code> represents the parameters used by the server to process the request.
 
-## Exploiting the path mapping discrepancies
+## Exploiting the static extension cache rules
 1. Using file extensions.
 - <code>http://example.com/user/123/profile/wcd.css</code>
 - This one here can exploit the caches rules. Say, the server is mapped according to the RESTful style. So, the server will interpret the request is being made to server the user 123's profile page and will ignore the wcd.css.
@@ -42,3 +44,16 @@ C. <code>/profile.ico</code> here .ico is not recognized by the server, so it wi
 - Say, the server decodes the url before processing, then it will treat the delimeter as it is and will process but what if the cache does not decode the url, then it will think the URL as a request for a static resource.
 - Say, if the cache first applies the cache rules and then decodes the URL and then sends to the server, then too the vulnerability arises.
 - For example, <code>/profile%23wcd.css</code>, if the server decodes %23 as #, then it will be treated as a delimeter but if the cache does not decode it, then it is just a static resource request. If the cache first applies the rules, and then decodes the URL and then sends it, then too # will be treated as a delimeter.
+
+## Exploiting static directory rules
+1. Exploiting the normalization discrepancy
+- The way origin server and the cache normalize the URL also can give rise to a web cache deception vulnerability.
+- Say, for the example <code>/static/..%2fprofile</code>, if the server normalizes it to <code>/profile</code> and return the profile information but the cache does not normalize it because it could not decode the / and donot resolve the .. and hence treats it as a request for static resource, then it will cache the response.
+- First of all choose one POST or a non cacheable request and then just add one random directory in front of it like <code>/aaa/..%2fprofile</code>, even if then also you get the profile page, that means that the URL is being normalized by the server or else if you get the 404 error message, then the server has failed to decode the / or failed to resolve the dots.
+- To check normalization by the cache, say with this example <code>/aaa/..%2fassets/js/stockCheck.js</code>
+- So in this example, if the response is still cached that means that the cache decoded the slash, but in other hand if not cached, it means that the cache did not decode the slash and also did not resolve the dot segment.
+
+## Exploiting the file name cache rules
+1. Detecting and exploiting the normalization discrepancies:
+- <code>/profile%2f%2e%2e%2findex.html</code>: If this is considered as /index.html and cached and that means, there is a cache rule for index.html and also the characters are decoded by the cache.
+- In the other hand if the content is not cached then that means either the characters are not decoded or there is no rule for caching of index.html file.
