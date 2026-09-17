@@ -51,4 +51,7 @@ function verify(token, secretOrPublicKey){\
 - Here the problem is that developers have a generic function which can handle both algorithms but they assume that they are going to use just the assymetric one that is RS256, but what happens if the algorithm is changed to the symmetric one by the attacker. As the developers assume that only assymetric one will be used, they pass the public key because it is safe but if the algorithm is changed to symmetric one, then the public key should not be shared, but in this case it is shared and that is the vulnerability. Now when algorithm is changed to symmetric one, the public key will be used and the verification is successful. 
 
 ## Performing an algorithm confusion attack
-- 
+- First of all you need to find out the public key used to sign the JWT in server. So, for that first way is that there are keys publicly exposed at endpoint /jwks.json or /.well-known/jwks.json. Secondly if not available publicly, then also there is a way to find out using existing tools. 
+One such is jwt_forgery.py or rsa_sign2n.\
+<code>docker run --rm -it portswigger/sig2n \<token1> \<token2></code>. This command is for rsa_sign2n which is available in a github repo <code>https://github.com/silentsignal/rsa_sign2n</code>. It needs two valid JWTs. What it does is it generates different values of n (n is RSA public modulus) and also a sample JWT to test and sends it to server. One of the generated n is the actual server RSA key, which is known once the server does not reject the request.
+- The public key is actually composed of (n.e) where n => RSA Public modulus but that is very deep, the main thing is that the tool tries to brute force the key using the two JWTs provided to it.
