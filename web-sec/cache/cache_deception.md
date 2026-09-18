@@ -57,3 +57,7 @@ C. <code>/profile.ico</code> here .ico is not recognized by the server, so it wi
 1. Detecting and exploiting the normalization discrepancies:
 - <code>/profile%2f%2e%2e%2findex.html</code>: If this is considered as /index.html and cached and that means, there is a cache rule for index.html and also the characters are decoded by the cache.
 - In the other hand if the content is not cached then that means either the characters are not decoded or there is no rule for caching of index.html file.
+
+## Short note for cache deception practicals
+- Static extension either directly using just the extension or by the delimeter (either in encoded form or normal form). 
+- Static directories rules: That can be also normally or by encoding the slash and the dots as well.
