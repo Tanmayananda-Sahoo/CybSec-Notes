@@ -27,6 +27,15 @@
 4. No encryption of data in rest or in transit.
 5. Invalid TLS Certificate.
 
+## Insecure Design flaws
+Insecure Design flaws occurs due the following reasons:
+- Weak business logic controls, like recovery or approval flows
+- Flawed assumptions about user or model behaviour
+- AI components with unchecked authority or access
+- Missing guardrails for LLMs and automation agents
+- Test or debug bypasses left in production
+- No consistent abuse-case review or AI threat modelling
+
 ### Note:
 - While solving the lab of THM, I got to know about one thing which might be important that is decoding the encrypted text in linux for ecb algorithm.\
 <code>openssl enc -aes-128-ecb -d -a -K 6d792d7365637265742d6b65792d3136 -in ciphertext.txt -out decrypted.bin</code>.
