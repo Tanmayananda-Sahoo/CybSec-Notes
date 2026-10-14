@@ -46,3 +46,7 @@ This is called as a scope upgrade vulnerability.
 
 5. Flawed scope validation(Implicit grant type flow)
 - Now in implicit grant type flow, the access token is directly provided through the browser.
+- Now consider the same scene to be set up, now the OAuth server gives back the access token to the client application but as the application is being controlled by the attacker, it gains the access token.
+- After gaining the access token, it request in the /userinfo endpoint requesting for additional scopes in the URL.(This request basically means that attacker is saying to the OAuth server that I have the access token, please add this to my scope as well).
+- If the OAuth server has some flaws or vulnerabilities then it will grant the request to the data that the victim has not requested for.
+- In this way, attacker can gain access to your unaccepted data.
